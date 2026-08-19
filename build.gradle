@@ -357,21 +357,9 @@ publishMods {
     modLoaders.add("forge")
     modLoaders.add("neoforge")
 
-    curseforge {
-        accessToken = providers.environmentVariable("CURSEFORGE_TOKEN")
-        projectId = "328085"
-        minecraftVersions.add(minecraft_version)
-    }
-
-    modrinth {
-        accessToken = providers.environmentVariable("MODRINTH_TOKEN")
-        projectId = "LNytGWDc"
-        minecraftVersions.add(minecraft_version)
-    }
-
     github {
         accessToken = providers.environmentVariable("GITHUB_TOKEN")
-        repository = "Creators-of-Create/Create"
+        repository = "ShastCraft-Team/SC-Create"
         commitish = gitHash
         tagName = "mc$minecraft_version-$mod_version"
         file.unset()
