@@ -1,5 +1,7 @@
 Original project: https://github.com/Creators-of-Create/Create
 
+---
+
 <p align="center"><img src="./.idea/icon.png" alt="Logo" width="200"></p>
 <h1 align="center">Create  <br>
 	<a href="https://r.createmod.net/p"><img src="https://img.shields.io/endpoint.svg?url=https%3A%2F%2Fshieldsio-patreon.vercel.app%2Fapi%3Fusername%3Dsimibubi%26type%3Dpatrons&style=flat&label=Supporters&color=FF5733" alt="Patreon"></a>

@@ -45,3 +45,7 @@ local.properties
 
 .DS_Store
 /libs/
+ 
+
+# VS Code
+.vscode
