@@ -92,7 +92,7 @@ public class RedstoneLinkBlock extends WrenchableDirectionalBlock implements IBE
 		if (state.getValue(RECEIVER))
 			return;
 
-		int power = getPower(worldIn, pos);
+		int power = getPower(worldIn, state, pos);
 		int powerFromPanels = getBlockEntityOptional(worldIn, pos).map(be -> {
 			if (be.panelSupport == null)
 				return 0;
@@ -117,12 +117,14 @@ public class RedstoneLinkBlock extends WrenchableDirectionalBlock implements IBE
 		withBlockEntityDo(worldIn, pos, be -> be.transmit(transmit));
 	}
 
-	private int getPower(Level worldIn, BlockPos pos) {
+	private static int getPower(Level worldIn, BlockState state, BlockPos pos) {
 		int power = 0;
 		for (Direction direction : Iterate.directions)
 			power = Math.max(worldIn.getSignal(pos.relative(direction), direction), power);
-		for (Direction direction : Iterate.directions)
-			power = Math.max(worldIn.getSignal(pos.relative(direction), Direction.UP), power);
+		for (Direction direction : Iterate.directions) {
+			if (state.getValue(FACING).getOpposite() != direction)
+				power = Math.max(worldIn.getSignal(pos.relative(direction), Direction.UP), power);
+		}
 		return power;
 	}
 
@@ -171,7 +173,7 @@ public class RedstoneLinkBlock extends WrenchableDirectionalBlock implements IBE
 			boolean blockPowered = worldIn.hasNeighborSignal(pos);
 			worldIn.setBlock(pos, state.cycle(RECEIVER)
 				.setValue(POWERED, blockPowered), 3);
-			be.transmit(wasReceiver ? 0 : getPower(worldIn, pos));
+			be.transmit(wasReceiver ? 0 : getPower(worldIn, state, pos));
 			return InteractionResult.SUCCESS;
 		});
 	}
