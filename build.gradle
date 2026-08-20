@@ -127,6 +127,28 @@ legacyForge {
     }
 }
 
+// The dedicated server created by runGameTestServer defaults to normal overworld
+// terrain generation, which places test structures deep underground with no sky
+// light. Crops in those structures fail their survival check and vanish before
+// the tests can run. Force a flat world so structures always have sky access.
+tasks.register("prepareGameTestServerProperties") {
+    def propsFile = project.file("run/gametest/server.properties")
+
+    doLast {
+        propsFile.parentFile.mkdirs()
+        def props = new Properties()
+        if (propsFile.exists()) {
+            propsFile.withReader("UTF-8") { props.load(it) }
+        }
+        props.setProperty("level-type", "minecraft:flat")
+        propsFile.withWriter("UTF-8") { props.store(it, null) }
+    }
+}
+
+tasks.named("runGameTestServer") {
+    dependsOn "prepareGameTestServerProperties"
+}
+
 repositories {
     maven { url = "https://maven.createmod.net" } // Ponder, Flywheel
     maven { url = "https://maven.ithundxr.dev/mirror" } // Registrate
