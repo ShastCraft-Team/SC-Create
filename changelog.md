@@ -1,4 +1,43 @@
 ------------------------------------------------------
+Create 6.0.8.2
+------------------------------------------------------
+
+Backport of the safe bug fixes and optimizations from upstream Create
+6.0.9 (mc1.21.1-only release) that apply cleanly to mc1.20.1/Forge
+without altering how any mechanism behaves.
+
+#### Optimizations
+
+- Optimize GlobalRailwayManager tick loops
+- Optimize EdgePointStorage tick loop
+- Optimize MountedItemStorageWrapper slot lookup
+- Optimize funnel item extraction
+
+#### Bug Fixes
+
+- Fix bottomless fluid limit being off by one
+- Fix encased fan shaft texture being rotated incorrectly
+- Fix crash disassembling a train at a station with a CC:Tweaked computer attached
+- Fix schedule text entry eating the E keystroke
+- Fix attribute filter ghost slot reading the wrong item
+- Harden pump and encased pipe detection against block registration edge cases
+- Fix toolbox deleting items when reloaded
+- Fix tree fertilizer deleting items instead of dropping them when growing trees over them
+- Improve factory gauge request accuracy
+- Fix portable storage interface connection issue
+- Fix floating point precision issues in GantryContraptionEntity
+- Fix crash rendering blocks with no block entity in the wrench rotation menu
+- Fix crash filling a state-changing block missing its target property
+- Fix bound cardboard recipe not accepting all string-tagged items
+- Fix clay milling recipe not always yielding 4 clay balls
+- Fix ladders splitting into multiple meshes when assembled in contraptions
+- Fix copycat blocks dropping items when removed via /fill
+- Fix contraption controls, smart fluid pipes, belts, and chain conveyors losing/duplicating item state when removed via /fill
+- Fix nixie tubes and redstone links being powered by their own supporting block
+- Fix precision issue in TrackNodeLocation
+- Respect interfaceScale for the train map overlay in Xaero's Minimap
+
+------------------------------------------------------
 Create 6.0.8
 ------------------------------------------------------
 
