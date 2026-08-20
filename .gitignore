@@ -49,3 +49,6 @@ local.properties
 
 # VS Code
 .vscode
+
+#custom
+*.log

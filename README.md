@@ -1,5 +1,7 @@
 Original project: https://github.com/Creators-of-Create/Create
 
+This fork is maintained for the [ShastCraft](https://shastcraft.com) project and targets Minecraft Forge 1.20.1.
+
 ---
 
 <p align="center"><img src="./.idea/icon.png" alt="Logo" width="200"></p>
