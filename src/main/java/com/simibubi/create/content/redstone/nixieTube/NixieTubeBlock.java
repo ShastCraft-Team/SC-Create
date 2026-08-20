@@ -238,7 +238,7 @@ public class NixieTubeBlock extends DoubleFaceAttachedBlock
 						} :
 						(currentPos, rowPosition) -> {
 							if (world.getBlockEntity(currentPos) instanceof NixieTubeBlockEntity ntbe)
-								NixieTubeBlock.updateDisplayedRedstoneValue(ntbe, true);
+								NixieTubeBlock.updateDisplayedRedstoneValue(ntbe, state, true);
 						});
 			}
 			Direction right = left.getOpposite();
@@ -252,7 +252,7 @@ public class NixieTubeBlock extends DoubleFaceAttachedBlock
 						} :
 						(currentPos, rowPosition) -> {
 							if (world.getBlockEntity(currentPos) instanceof NixieTubeBlockEntity ntbe)
-								NixieTubeBlock.updateDisplayedRedstoneValue(ntbe, true);
+								NixieTubeBlock.updateDisplayedRedstoneValue(ntbe, state, true);
 						});
 			}
 		}
@@ -349,17 +349,17 @@ public class NixieTubeBlock extends DoubleFaceAttachedBlock
 		updateDisplayedRedstoneValue(state, worldIn, pos);
 	}
 
-	public static void updateDisplayedRedstoneValue(NixieTubeBlockEntity be, boolean force) {
+	public static void updateDisplayedRedstoneValue(NixieTubeBlockEntity be, BlockState state, boolean force) {
 		if (be.getLevel() == null || be.getLevel().isClientSide)
 			return;
 		if (be.reactsToRedstone() || force)
-			be.updateRedstoneStrength(getPower(be.getLevel(), be.getBlockPos()));
+			be.updateRedstoneStrength(getPower(be.getLevel(), state, be.getBlockPos()));
 	}
 
 	private void updateDisplayedRedstoneValue(BlockState state, Level worldIn, BlockPos pos) {
 		if (worldIn.isClientSide)
 			return;
-		withBlockEntityDo(worldIn, pos, be -> NixieTubeBlock.updateDisplayedRedstoneValue(be, false));
+		withBlockEntityDo(worldIn, pos, be -> NixieTubeBlock.updateDisplayedRedstoneValue(be, state, false));
 	}
 
 	static boolean isValidBlock(BlockGetter world, BlockPos pos, boolean above) {
@@ -368,12 +368,14 @@ public class NixieTubeBlock extends DoubleFaceAttachedBlock
 			.isEmpty();
 	}
 
-	private static int getPower(Level worldIn, BlockPos pos) {
+	private static int getPower(Level worldIn, BlockState state, BlockPos pos) {
 		int power = 0;
 		for (Direction direction : Iterate.directions)
 			power = Math.max(worldIn.getSignal(pos.relative(direction), direction), power);
-		for (Direction direction : Iterate.directions)
-			power = Math.max(worldIn.getSignal(pos.relative(direction), Direction.UP), power);
+		for (Direction direction : Iterate.directions) {
+			if (state.getValue(FACING).getOpposite() != direction)
+				power = Math.max(worldIn.getSignal(pos.relative(direction), Direction.UP), power);
+		}
 		return power;
 	}
 

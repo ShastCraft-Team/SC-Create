@@ -16,6 +16,7 @@ import net.createmod.catnip.math.AngleHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
+import net.minecraft.world.Clearable;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -24,7 +25,7 @@ import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.fluids.FluidStack;
 
-public class SmartFluidPipeBlockEntity extends SmartBlockEntity {
+public class SmartFluidPipeBlockEntity extends SmartBlockEntity implements Clearable {
 
 	private FilteringBehaviour filter;
 
@@ -38,6 +39,11 @@ public class SmartFluidPipeBlockEntity extends SmartBlockEntity {
 		behaviours.add(filter = new FilteringBehaviour(this, new SmartPipeFilterSlot()).forFluids()
 			.withCallback(this::onFilterChanged));
 		registerAwardables(behaviours, FluidPropagator.getSharedTriggers());
+	}
+
+	@Override
+	public void clearContent() {
+		filter.setFilter(ItemStack.EMPTY);
 	}
 
 	private void onFilterChanged(ItemStack newFilter) {

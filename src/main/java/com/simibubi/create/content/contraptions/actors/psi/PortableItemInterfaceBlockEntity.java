@@ -27,6 +27,8 @@ public class PortableItemInterfaceBlockEntity extends PortableStorageInterfaceBl
 		LazyOptional<IItemHandlerModifiable> oldCap = capability;
 		capability = LazyOptional.of(() -> new InterfaceItemHandler(contraption.getStorage().getAllItems()));
 		oldCap.invalidate();
+		if (level != null && !level.isClientSide)
+			level.updateNeighborsAt(worldPosition, getBlockState().getBlock());
 		super.startTransferringTo(contraption, distance);
 	}
 
@@ -35,6 +37,8 @@ public class PortableItemInterfaceBlockEntity extends PortableStorageInterfaceBl
 		LazyOptional<IItemHandlerModifiable> oldCap = capability;
 		capability = createEmptyHandler();
 		oldCap.invalidate();
+		if (level != null && !level.isClientSide)
+			level.updateNeighborsAt(worldPosition, getBlockState().getBlock());
 		super.stopTransferring();
 	}
 

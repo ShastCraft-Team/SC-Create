@@ -18,6 +18,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
+import net.minecraft.world.Clearable;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.TrapDoorBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -29,15 +30,13 @@ import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 public class CopycatBlockEntity extends SmartBlockEntity
-	implements SpecialBlockEntityItemRequirement, TransformableBlockEntity, PartialSafeNBT {
+	implements SpecialBlockEntityItemRequirement, TransformableBlockEntity, PartialSafeNBT, Clearable {
 
-	private BlockState material;
-	private ItemStack consumedItem;
+	private BlockState material = AllBlocks.COPYCAT_BASE.getDefaultState();
+	private ItemStack consumedItem = ItemStack.EMPTY;
 
 	public CopycatBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
 		super(type, pos, state);
-		material = AllBlocks.COPYCAT_BASE.getDefaultState();
-		consumedItem = ItemStack.EMPTY;
 	}
 
 	public BlockState getMaterial() {
@@ -192,6 +191,12 @@ public class CopycatBlockEntity extends SmartBlockEntity
 		return ModelData.builder()
 			.with(CopycatModel.MATERIAL_PROPERTY, material)
 			.build();
+	}
+
+	@Override
+	public void clearContent() {
+		material = AllBlocks.COPYCAT_BASE.getDefaultState();
+		consumedItem = ItemStack.EMPTY;
 	}
 
 }

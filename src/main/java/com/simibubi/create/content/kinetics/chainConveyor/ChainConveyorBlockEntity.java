@@ -40,6 +40,7 @@ import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
+import net.minecraft.world.Clearable;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
@@ -56,7 +57,7 @@ import net.minecraft.world.phys.Vec3;
 
 import net.minecraftforge.items.ItemHandlerHelper;
 
-public class ChainConveyorBlockEntity extends KineticBlockEntity implements TransformableBlockEntity {
+public class ChainConveyorBlockEntity extends KineticBlockEntity implements TransformableBlockEntity, Clearable {
 
 	public record ConnectionStats(float tangentAngle, float chainLength, Vec3 start, Vec3 end) {
 	}
@@ -589,6 +590,13 @@ public class ChainConveyorBlockEntity extends KineticBlockEntity implements Tran
 				.length() * 8),
 			vec -> level.addParticle(new BlockParticleOption(ParticleTypes.BLOCK, Blocks.CHAIN.defaultBlockState()),
 				vec.x, vec.y, vec.z, 0, 0, 0));
+	}
+
+	@Override
+	public void clearContent() {
+		connections.clear();
+		travellingPackages.clear();
+		loopingPackages.clear();
 	}
 
 	@Override
