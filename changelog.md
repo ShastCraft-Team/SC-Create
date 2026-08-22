@@ -30,6 +30,7 @@ since there is nothing equivalent to backport them onto.
 - Fix backtanks not having the enchantment glint when worn
 - Fix LayeredArmorItem (custom-rendered armor) never rendering the enchantment glint
 - Fix waxed copper tiles and shingles not having the correct stonecutting/crafting recipes
+- Fix Schematicannon-placed Lectern with a Linked Controller crashing (uninitialized ItemStackHandler) (#9448)
 
 ------------------------------------------------------
 Create 6.0.8.2
