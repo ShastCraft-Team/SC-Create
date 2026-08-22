@@ -22,6 +22,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.world.Clearable;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
@@ -30,7 +31,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
-public class ContraptionControlsBlockEntity extends SmartBlockEntity {
+public class ContraptionControlsBlockEntity extends SmartBlockEntity implements Clearable {
 
 	public FilteringBehaviour filtering;
 	public boolean disabled;
@@ -85,6 +86,11 @@ public class ContraptionControlsBlockEntity extends SmartBlockEntity {
 		int value = disabled ? 4 * 45 : 0;
 		indicator.setValue(value);
 		indicator.updateChaseTarget(value);
+	}
+
+	@Override
+	public void clearContent() {
+		filtering.setFilter(ItemStack.EMPTY);
 	}
 
 	public void tickAnimations() {
