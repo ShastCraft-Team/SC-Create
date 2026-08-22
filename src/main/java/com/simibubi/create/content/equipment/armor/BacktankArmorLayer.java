@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
@@ -42,7 +43,8 @@ public class BacktankArmorLayer<T extends LivingEntity, M extends EntityModel<T>
 		if (!(entityModel instanceof HumanoidModel<?> model))
 			return;
 
-		VertexConsumer vc = buffer.getBuffer(Sheets.cutoutBlockSheet());
+		boolean hasGlint = entity.getItemBySlot(BacktankItem.SLOT).hasFoil();
+		VertexConsumer vc = ItemRenderer.getFoilBuffer(buffer, Sheets.cutoutBlockSheet(), false, hasGlint);
 		BlockState renderedState = item.getBlock().defaultBlockState()
 			.setValue(BacktankBlock.HORIZONTAL_FACING, Direction.SOUTH);
 		SuperByteBuffer backtank = CachedBuffers.block(renderedState);
