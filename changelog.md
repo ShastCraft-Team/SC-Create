@@ -1,4 +1,37 @@
 ------------------------------------------------------
+Create 6.0.8.3
+------------------------------------------------------
+
+Backport of the safe bug fixes and optimizations from upstream Create
+6.0.10 (mc1.21.1-only release) that apply cleanly to mc1.20.1/Forge
+without altering how any mechanism behaves. As with 6.0.8.2, fixes that
+depend on Minecraft 1.21-only APIs (Data Components, attribute-based
+reach, NeoForge's capability system, TickRateManager) were left out
+since there is nothing equivalent to backport them onto.
+
+#### Optimizations
+
+- Optimize GlobalRailwayManager#playerLogin
+
+#### Bug Fixes
+
+- Fix CreateMixinPlugin checking the wrong class name when gating the Xaero's Minimap compat mixin
+- Fix postbox duplication if broken while it is still being accessed
+- Fix tanks not updating correctly in specific cases
+- Fix rare crash with ContraptionSeatMappingPacket
+- Fix basins not spawning fluid particles
+- Fix mechanical mixers at slower than required speed still playing an animation and continuing to mix
+- Fix crash on train departure when the train no longer exists
+- Fix the count of filtering behaviours being set to 1 when the item has been removed
+- Fix VirtualRenderWorld not marking block entities as removed
+- Add Plough Blacklist and Whitelist tags, and use them instead of a hardcoded NetherPortalBlock check
+- Match #create:seats tag directly instead of a SeatBlock instanceof check
+- Limit maxAssemblyLength to 512 and maxBogeyCount to 200 to prevent runaway train assembly
+- Fix backtanks not having the enchantment glint when worn
+- Fix LayeredArmorItem (custom-rendered armor) never rendering the enchantment glint
+- Fix waxed copper tiles and shingles not having the correct stonecutting/crafting recipes
+
+------------------------------------------------------
 Create 6.0.8.2
 ------------------------------------------------------
 
