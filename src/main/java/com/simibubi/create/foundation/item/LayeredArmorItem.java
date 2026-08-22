@@ -58,6 +58,9 @@ public interface LayeredArmorItem extends CustomRenderedArmorItem {
 		Model model, boolean glint, float red, float green, float blue, ResourceLocation armorResource) {
 		VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.armorCutoutNoCull(armorResource));
 		model.renderToBuffer(poseStack, vertexconsumer, light, OverlayTexture.NO_OVERLAY, red, green, blue, 1.0F);
+		if (glint)
+			model.renderToBuffer(poseStack, bufferSource.getBuffer(RenderType.armorEntityGlint()), light,
+				OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
 	}
 
 	String getArmorTextureLocation(LivingEntity entity, EquipmentSlot slot, ItemStack stack, int layer);
