@@ -135,7 +135,7 @@ public class CopperBlockSet {
 			.initialProperties(() -> baseBlock.get())
 			.loot((lt, block) -> variant.generateLootTable(lt, block, this, state, waxed))
 			.blockstate((ctx, prov) -> variant.generateBlockState(ctx, prov, this, state, waxed))
-			.recipe((c, p) -> variant.generateRecipes(entries.get(BlockVariant.INSTANCE)[state.ordinal()], c, p))
+			.recipe((c, p) -> variant.generateRecipes(get(BlockVariant.INSTANCE, state, waxed), c, p))
 			.transform(TagGen.pickaxeOnly())
 			.onRegister(block -> onRegister.accept(state, block))
 			.tag(BlockTags.NEEDS_STONE_TOOL)
