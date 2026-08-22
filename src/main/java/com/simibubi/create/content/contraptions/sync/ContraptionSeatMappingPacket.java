@@ -27,7 +27,7 @@ public class ContraptionSeatMappingPacket extends SimplePacketBase {
 
 	public ContraptionSeatMappingPacket(int entityID, Map<UUID, Integer> mapping, int dismountedID) {
 		this.entityID = entityID;
-		this.mapping = mapping;
+		this.mapping = Map.copyOf(mapping);
 		this.dismountedID = dismountedID;
 	}
 
