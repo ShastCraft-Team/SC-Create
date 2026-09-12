@@ -93,32 +93,38 @@ public class SchematicPrinter {
 		if (!blueprint.hasTag() || !blueprint.getTag().getBoolean("Deployed"))
 			return;
 
-		StructureTemplate activeTemplate =
-			SchematicItem.loadSchematic(originalWorld, blueprint);
-		StructurePlaceSettings settings = SchematicItem.getSettings(blueprint, processNBT);
-
 		schematicAnchor = NbtUtils.readBlockPos(blueprint.getTag()
 			.getCompound("Anchor"));
 		blockReader = new SchematicLevel(schematicAnchor, originalWorld);
 
+		// SchematicItem.loadSchematic() already guards its own file read against a corrupted/truncated
+		// .nbt (catches IOException internally and logs "Failed to read schematic"), but a schematic can
+		// still fail structurally once placeInWorld() actually walks its block/entity data - and on
+		// servers running an NBT-reimplementing coremod (e.g. Arclight), a corrupted file has also been
+		// observed escaping that internal guard entirely. Loading the template and placing it are
+		// wrapped in the same try so either failure mode lands on the existing isErrored recovery path
+		// instead of crashing the server tick.
 		try {
+			StructureTemplate activeTemplate = SchematicItem.loadSchematic(originalWorld, blueprint);
+			StructurePlaceSettings settings = SchematicItem.getSettings(blueprint, processNBT);
+
 			activeTemplate.placeInWorld(blockReader, schematicAnchor, schematicAnchor, settings,
 				blockReader.getRandom(), Block.UPDATE_CLIENTS);
+
+			BlockPos extraBounds = StructureTemplate.calculateRelativePosition(settings, new BlockPos(activeTemplate.getSize())
+				.offset(-1, -1, -1));
+			blockReader.setBounds(BBHelper.encapsulate(blockReader.getBounds(), extraBounds));
+
+			StructureTransform transform = new StructureTransform(settings.getRotationPivot(), Direction.Axis.Y,
+				settings.getRotation(), settings.getMirror());
+			for (BlockEntity be : blockReader.getBlockEntities())
+				transform.apply(be);
 		} catch (Exception e) {
 			Create.LOGGER.error("Failed to load Schematic for Printing", e);
 			schematicLoaded = true;
 			isErrored = true;
 			return;
 		}
-
-		BlockPos extraBounds = StructureTemplate.calculateRelativePosition(settings, new BlockPos(activeTemplate.getSize())
-			.offset(-1, -1, -1));
-		blockReader.setBounds(BBHelper.encapsulate(blockReader.getBounds(), extraBounds));
-
-		StructureTransform transform = new StructureTransform(settings.getRotationPivot(), Direction.Axis.Y,
-			settings.getRotation(), settings.getMirror());
-		for (BlockEntity be : blockReader.getBlockEntities())
-			transform.apply(be);
 
 		printingEntityIndex = -1;
 		printStage = PrintStage.BLOCKS;
